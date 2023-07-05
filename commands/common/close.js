@@ -1,3 +1,4 @@
+const fs = require('node:fs');
 const { SlashCommandBuilder } = require('discord.js');
 const SSH = require('simple-ssh');
 require('dotenv').config();
