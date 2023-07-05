@@ -12,7 +12,7 @@ module.exports = {
   cooldown: 10,
   data: new SlashCommandBuilder()
     .setName('關機')
-    .setDescription('還在開發中...'),
+    .setDescription('儲存遊戲進度並關閉伺服器～'),
   async execute(interaction) {
     await interaction.reply('關機中...');
 
@@ -25,14 +25,17 @@ module.exports = {
     const prom = new Promise((resolve, reject) => {
       let ourout = "";
       ssh
-        .exec('pzserver command players', {
-          exit: () => {
-            ourout += "\nSuccessfully Exited!";
-            resolve(ourout);
-          },
+        .exec('pzserver quit', {
           out: (stdout) => {
             ourout += stdout;
           }
+        })
+        .exec('sudo halt', {
+          exit: () => {
+            // ourout += "\nSuccessfully Exited!";
+            resolve();
+          },
+          out: (stdout) => { }
         })
         .start({
           fail: (e) => {
@@ -42,13 +45,10 @@ module.exports = {
         });
     });
 
-    console.log('wait ssh');
+    await prom;
+    // const res = await prom;
 
-    const res = await prom;
-
-    console.log('complete ssh');
-
-    await interaction.editReply(res);
+    await interaction.editReply('已關機');
     // await interaction.deferReply();
     // await wait(4000);
     // await interaction.reply('已關機');
