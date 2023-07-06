@@ -1,3 +1,4 @@
+const ec2 = require('../../Services/ec2');
 const fs = require('node:fs');
 const { SlashCommandBuilder } = require('discord.js');
 const SSH = require('simple-ssh');
