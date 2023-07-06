@@ -4,12 +4,15 @@
   "description": "a nodejs server for discord bot",
   "scripts": {
     "start": "node index.js",
-    "deploy-command": "node deploy-commands.js"
+    "deploy-command": "node deploy-commands.js",
+    "server:start": "pm2 start index.js --name discord-bot --watch",
+    "server:remove": "pm2 delete discord-bot"
   },
   "main": "index.js",
   "author": "Jason Zhuang",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.1411.0",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "simple-ssh": "^1.1.1"

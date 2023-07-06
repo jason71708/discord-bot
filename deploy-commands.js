@@ -4,6 +4,7 @@ const path = require('node:path');
 require('dotenv').config();
 const token = process.env.token;
 const clientId = process.env.clientId;
+const guildId = process.env.guildId;
 
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
@@ -36,7 +37,7 @@ const rest = new REST().setToken(token);
 
     // The put method is used to fully refresh all commands in the guild with the current set
     const data = await rest.put(
-      Routes.applicationCommands(clientId),
+      Routes.applicationGuildCommands(clientId, guildId),
       { body: commands },
     );
 
@@ -53,6 +54,6 @@ const rest = new REST().setToken(token);
 //   .catch(console.error);
 
 // for global commands
-// rest.delete(Routes.applicationCommand(clientId, '1125787127737749534'))
+// rest.delete(Routes.applicationCommand(clientId, '1125855354736095323'))
 //   .then(() => console.log('Successfully deleted application command'))
 //   .catch(console.error);
