@@ -3,6 +3,7 @@ const SSH = require('simple-ssh');
 const fs = require('node:fs');
 const ec2 = require('../../Services/ec2');
 const { EC2_STATUS, ec2Ids } = require('../../constants/ec2');
+const { roleNames } = require('../../constants/guild');
 require('dotenv').config();
 
 const host = process.env.host;
@@ -94,6 +95,12 @@ module.exports = {
     .setDescription('保存 Project Zomboid 遊戲進度並關閉伺服器～'),
   async execute(interaction) {
     try {
+      const hasPermission = interaction.member.roles.cache.find(r => {
+        return roleNames.some(n => r.name.includes(n));
+      });
+      if (!hasPermission) {
+        return interaction.reply('您無權限使用此指令');
+      }
       await interaction.reply('關機中...');
       checkEC2State(interaction);
     } catch (error) {
