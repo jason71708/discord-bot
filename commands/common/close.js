@@ -1,7 +1,8 @@
-const ec2 = require('../../Services/ec2');
-const fs = require('node:fs');
 const { SlashCommandBuilder } = require('discord.js');
 const SSH = require('simple-ssh');
+const fs = require('node:fs');
+const ec2 = require('../../Services/ec2');
+const { EC2_STATUS, ec2Ids } = require('../../constants/ec2');
 require('dotenv').config();
 
 const host = process.env.host;
@@ -11,7 +12,7 @@ const userpassword = process.env.userpassword;
 
 const params = {
   InstanceIds: [
-    'i-088ccd0c0fd37cfc0'
+    ...ec2Ids
   ]
 };
 

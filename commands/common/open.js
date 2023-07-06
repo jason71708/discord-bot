@@ -1,21 +1,13 @@
-const ec2 = require('../../Services/ec2');
 const { SlashCommandBuilder } = require('discord.js');
-require('dotenv').config();
 const wait = require('node:timers/promises').setTimeout;
+const ec2 = require('../../Services/ec2');
+const { EC2_STATUS, ec2Ids } = require('../../constants/ec2');
+require('dotenv').config();
 
 const params = {
   InstanceIds: [
-    'i-088ccd0c0fd37cfc0'
+    ...ec2Ids
   ]
-};
-
-const EC2_STATUS = {
-  pending: 0,
-  running: 16,
-  'shutting-down': 32,
-  terminated: 48,
-  stopping: 64,
-  stopped: 80
 };
 
 const checkEC2State = (interaction) => {
