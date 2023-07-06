@@ -37,7 +37,9 @@ module.exports = {
               ourout += "\nSuccessfully Exited!";
               resolve();
             },
-            out: (stdout) => { }
+            out: (stdout) => {
+              ourout += stdout;
+            }
           })
           .start({
             fail: (e) => {
