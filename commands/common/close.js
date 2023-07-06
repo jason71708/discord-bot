@@ -27,8 +27,7 @@ const checkEC2State = (interaction) => {
           await interaction.followUp('伺服器正在開機中，稍後才能執行關機指令');
           break;
         case EC2_STATUS.running:
-          // stopEC2(interaction);
-          await interaction.followUp('可執行關機');
+          stopEC2(interaction);
           break;
         case EC2_STATUS['shutting-down']:
           await interaction.followUp('伺服器已終止');
