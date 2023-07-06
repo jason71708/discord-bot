@@ -6,6 +6,7 @@ require('dotenv').config();
 const host = process.env.host;
 const user = process.env.user;
 const pemfile = process.env.pemfile;
+const userpassword = process.env.userpassword;
 // const wait = require('node:timers/promises').setTimeout;
 
 module.exports = {
@@ -31,9 +32,9 @@ module.exports = {
               ourout += stdout;
             }
           })
-          .exec('sudo halt', {
+          .exec(`echo ${userpassword} | sudo -S halt`, {
             exit: () => {
-              // ourout += "\nSuccessfully Exited!";
+              ourout += "\nSuccessfully Exited!";
               resolve();
             },
             out: (stdout) => { }
