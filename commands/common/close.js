@@ -12,6 +12,7 @@ const pemfile = process.env.pemfile;
 const userpassword = process.env.userpassword;
 
 const params = {
+  IncludeAllInstances: true,
   InstanceIds: [
     ...ec2Ids
   ]
@@ -89,7 +90,7 @@ const stopEC2 = async (interaction) => {
 };
 
 module.exports = {
-  cooldown: 300,
+  cooldown: 30,
   data: new SlashCommandBuilder()
     .setName('關機')
     .setDescription('保存 Project Zomboid 遊戲進度並關閉伺服器～'),

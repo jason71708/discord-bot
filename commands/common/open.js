@@ -6,6 +6,7 @@ const { roleNames } = require('../../constants/guild');
 require('dotenv').config();
 
 const params = {
+  IncludeAllInstances: true,
   InstanceIds: [
     ...ec2Ids
   ]
@@ -56,7 +57,7 @@ const startEC2 = (interaction) => {
 };
 
 module.exports = {
-  cooldown: 300,
+  cooldown: 30,
   data: new SlashCommandBuilder()
     .setName('開機')
     .setDescription('開啟 Project Zomboid 遊戲伺服器～'),
@@ -69,7 +70,8 @@ module.exports = {
         return interaction.reply('您無權限使用此指令');
       }
       await interaction.reply('開機中...');
-      checkEC2State(interaction);
+      // checkEC2State(interaction);
+      startEC2(interaction);
     } catch (error) {
       interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
       console.log(error);
