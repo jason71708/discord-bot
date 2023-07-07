@@ -23,7 +23,7 @@ module.exports = {
     try {
       const optionName = interaction.options.getString('選項') ?? '';
       if (optionName) {
-        await interaction.reply(`${optionName}攻略:\n${options[optionName]}`);
+        await interaction.reply(`${optionName}攻略:\n<${options[optionName]}>`);
       } else {
         await interaction.reply('請選擇有效選項');
       }

@@ -11,7 +11,7 @@ const user = process.env.user;
 const pemfile = process.env.pemfile;
 const userpassword = process.env.userpassword;
 
-const params = {
+const describeInstanceStatusParams = {
   IncludeAllInstances: true,
   InstanceIds: [
     ...ec2Ids
@@ -19,7 +19,7 @@ const params = {
 };
 
 const checkEC2State = (interaction) => {
-  ec2.describeInstanceStatus(params, async (err, data) => {
+  ec2.describeInstanceStatus(describeInstanceStatusParams, async (err, data) => {
     if (err) {
       console.log(err, err.stack);
       await interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
@@ -96,13 +96,14 @@ module.exports = {
     .setDescription('保存 Project Zomboid 遊戲進度並關閉伺服器～'),
   async execute(interaction) {
     try {
+      await interaction.reply('處理中...');
       const hasPermission = interaction.member.roles.cache.find(r => {
         return roleNames.some(n => r.name.includes(n));
       });
       if (!hasPermission) {
-        return interaction.reply('您無權限使用此指令');
+        return interaction.followUp('您無權限使用此指令');
       }
-      await interaction.reply('關機中...');
+      await interaction.editReply('關機中...');
       checkEC2State(interaction);
     } catch (error) {
       interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');

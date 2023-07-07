@@ -5,15 +5,21 @@ const { EC2_STATUS, ec2Ids } = require('../../constants/ec2');
 const { roleNames } = require('../../constants/guild');
 require('dotenv').config();
 
-const params = {
+const describeInstanceStatusParams = {
   IncludeAllInstances: true,
   InstanceIds: [
     ...ec2Ids
   ]
 };
 
+const startInstancesParams = {
+  InstanceIds: [
+    ...ec2Ids
+  ]
+};
+
 const checkEC2State = (interaction) => {
-  ec2.describeInstanceStatus(params, async (err, data) => {
+  ec2.describeInstanceStatus(describeInstanceStatusParams, async (err, data) => {
     if (err) {
       console.log(err, err.stack);
       await interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
@@ -45,12 +51,12 @@ const checkEC2State = (interaction) => {
 };
 
 const startEC2 = (interaction) => {
-  ec2.startInstances(params, async (err, data) => {
+  ec2.startInstances(startInstancesParams, async (err, data) => {
     if (err) {
       console.log(err, err.stack);
       await interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
     } else {
-      await wait(3 * 60 * 1000); // wait for game server start
+      await wait(5 * 60 * 1000); // wait for game server start
       await interaction.followUp('已開機');
     };
   });
@@ -63,15 +69,15 @@ module.exports = {
     .setDescription('開啟 Project Zomboid 遊戲伺服器～'),
   async execute(interaction) {
     try {
+      await interaction.reply('處理中...');
       const hasPermission = interaction.member.roles.cache.find(r => {
         return roleNames.some(n => r.name.includes(n));
       });
       if (!hasPermission) {
-        return interaction.reply('您無權限使用此指令');
+        return interaction.followUp('您無權限使用此指令');
       }
-      await interaction.reply('開機中...');
-      // checkEC2State(interaction);
-      startEC2(interaction);
+      await interaction.editReply('開機中...');
+      checkEC2State(interaction);
     } catch (error) {
       interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
       console.log(error);
