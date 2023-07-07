@@ -90,7 +90,7 @@ const stopEC2 = async (interaction) => {
 };
 
 module.exports = {
-  cooldown: 30,
+  cooldown: 3,
   data: new SlashCommandBuilder()
     .setName('關機')
     .setDescription('保存 Project Zomboid 遊戲進度並關閉伺服器～'),
@@ -106,8 +106,8 @@ module.exports = {
       await interaction.editReply('關機中...');
       checkEC2State(interaction);
     } catch (error) {
-      interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
       console.log(error);
+      interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
     }
   },
 };

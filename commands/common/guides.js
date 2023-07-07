@@ -28,8 +28,8 @@ module.exports = {
         await interaction.reply('請選擇有效選項');
       }
     } catch (error) {
-      interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
       console.log(error);
+      interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
     }
   },
 };

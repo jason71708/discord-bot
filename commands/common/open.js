@@ -1,9 +1,15 @@
 const { SlashCommandBuilder } = require('discord.js');
+const SSH = require('simple-ssh');
+const fs = require('node:fs');
 const wait = require('node:timers/promises').setTimeout;
 const ec2 = require('../../Services/ec2');
 const { EC2_STATUS, ec2Ids } = require('../../constants/ec2');
 const { roleNames } = require('../../constants/guild');
 require('dotenv').config();
+
+const host = process.env.host;
+const user = process.env.user;
+const pemfile = process.env.pemfile;
 
 const describeInstanceStatusParams = {
   IncludeAllInstances: true,
@@ -56,14 +62,53 @@ const startEC2 = (interaction) => {
       console.log(err, err.stack);
       await interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
     } else {
-      await wait(5 * 60 * 1000); // wait for game server start
-      await interaction.followUp('已開機');
+      startGameServer(interaction);
     };
   });
 };
 
+const startGameServer = (interaction) => {
+  ec2.waitFor('instanceStatusOk', startInstancesParams, async (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      await interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
+    } else {
+      const ssh = new SSH({
+        host: host,
+        user: user,
+        key: fs.readFileSync(pemfile)
+      });
+
+      const prom = new Promise((resolve, reject) => {
+        let ourout = "";
+        ssh
+          .exec('pzserver start', {
+            exit: () => {
+              resolve(ourout);
+            },
+            out: (stdout) => {
+              ourout += stdout;
+            }
+          })
+          .start({
+            fail: (e) => {
+              console.log(e);
+              reject(e);
+            }
+          });
+      });
+
+      const res = await prom;
+      console.log(res);
+
+      await wait(2 * 60 * 1000); // wait for game server start
+      await interaction.followUp('已開機');
+    }
+  });
+};
+
 module.exports = {
-  cooldown: 30,
+  cooldown: 3,
   data: new SlashCommandBuilder()
     .setName('開機')
     .setDescription('開啟 Project Zomboid 遊戲伺服器～'),
@@ -79,8 +124,8 @@ module.exports = {
       await interaction.editReply('開機中...');
       checkEC2State(interaction);
     } catch (error) {
-      interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
       console.log(error);
+      interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
     }
   },
 };
