@@ -101,7 +101,6 @@ const startGameServer = (interaction) => {
       const res = await prom;
       console.log(res);
 
-      await wait(2 * 60 * 1000); // wait for game server start
       await interaction.followUp('已開機');
     }
   });
