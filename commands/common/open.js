@@ -81,14 +81,10 @@ const startGameServer = (interaction) => {
       });
 
       const prom = new Promise((resolve, reject) => {
-        let ourout = "";
         ssh
           .exec('pzserver start', {
-            exit: () => {
-              resolve(ourout);
-            },
             out: (stdout) => {
-              ourout += stdout;
+              resolve(stdout + ' game server start');
             }
           })
           .start({
