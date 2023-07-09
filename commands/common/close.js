@@ -90,7 +90,7 @@ const stopEC2 = async (interaction) => {
 };
 
 module.exports = {
-  cooldown: 3,
+  cooldown: 60,
   data: new SlashCommandBuilder()
     .setName('關機')
     .setDescription('保存 Project Zomboid 遊戲進度並關閉伺服器～'),

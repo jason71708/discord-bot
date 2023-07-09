@@ -62,6 +62,7 @@ const startEC2 = (interaction) => {
       console.log(err, err.stack);
       await interaction.followUp('指令程序有錯誤，請聯繫松山彭于晏');
     } else {
+      console.log('starting server');
       startGameServer(interaction);
     };
   });
@@ -107,7 +108,7 @@ const startGameServer = (interaction) => {
 };
 
 module.exports = {
-  cooldown: 3,
+  cooldown: 60,
   data: new SlashCommandBuilder()
     .setName('開機')
     .setDescription('開啟 Project Zomboid 遊戲伺服器～'),
